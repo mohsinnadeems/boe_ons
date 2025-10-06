@@ -10,6 +10,7 @@ boe_ons/
 ├── src/ # Scripts for downloading and cleaning data
 │ ├── fetch_data.py
 │ └── data_cleaning_structuring.py
+│ └── main.py
 │
 ├── analysis/ # Scripts for visualizing and forecasting
 │ ├── plot_monthly_vacancies.py
@@ -54,3 +55,43 @@ cd boe_ons
 # Install dependencies
 pip install -r requirements.txt
  ```
+
+
+## How to Run the Project
+
+Once dependencies are installed, run the entire pipeline with a single command:
+```bash
+python src/main.py
+```
+
+This will:
+
+#### 1- Fetch vacancy data directly from the ONS API (latest and historical vintages).
+
+#### 2- Clean and consolidate the downloaded files into a structured dataset:
+```
+➤ data/cleaned_monthly_series.csv
+```
+
+#### 3- Generate visualizations showing monthly trends and revisions over time:
+```
+➤ plots/monthly_vacancies.png
+```
+
+#### 4- Build a forecasting model using Holt–Winters exponential smoothing and save outputs:
+```
+➤ plots/forecasting_plot.png
+➤ data/forecasting.csv
+```
+
+#### After execution, you’ll find:
+
+Cleaned datasets in the data/ folder
+
+Generated plots in the plots/ folder
+
+## Notes
+
+#### The pipeline is modular: each step (fetch, clean, visualize, forecast) can be run independently if needed.
+
+#### All scripts are documented with docstrings for readability and reproducibility.
