@@ -1,3 +1,16 @@
+"""
+fetch_data.py
+
+This script automates downloading a set of vintage CSV files containing
+vacancy time series data from the UK Office for National Statistics (ONS).
+
+It detects the latest available vintage, then downloads a subset of recent
+vintages plus the latest file.
+
+Usage:
+    python fetch_data.py
+"""
+
 import requests
 import os
 import time
@@ -6,15 +19,24 @@ from tqdm import tqdm
 BASE_URL = "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ap2y/lms"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/116.0.0.0 Safari/537.36"
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/116.0.0.0 Safari/537.36"
 }
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 SAFE_MIN_VINTAGE = 117
 
 
-def find_latest_vintage(start=200):
+def find_latest_vintage(start: int = 200) -> int:
+    """
+     Detect the latest vintage version of the ONS vacancy dataset.
+
+     Args:
+         start (int): The highest vintage version number to check (default: 200).
+
+     Returns:
+         int: The latest vintage version found, with a minimum floor of SAFE_MIN_VINTAGE (v117).
+     """
     print("Detecting latest vintage...")
     detected = None
 
@@ -37,7 +59,14 @@ def find_latest_vintage(start=200):
     return detected
 
 
-def download_csv(url, filename):
+def download_csv(url: str, filename: str) -> None:
+    """
+      Download a CSV file from a URL and save it locally.
+
+      Args:
+          url (str): The URL to download the CSV from.
+          filename (str): The local file path where the CSV will be saved.
+      """
     if os.path.exists(filename):
         print(f"Already exists: {filename}")
         return
@@ -48,15 +77,22 @@ def download_csv(url, filename):
         if r.status_code == 200:
             with open(filename, "wb") as f:
                 f.write(r.content)
-            print(f"Downloaded: {filename}")
             return
         else:
             print(f"Failed: {url} (status {r.status_code}), retry {i + 1}/{retries}")
-            time.sleep(2 ** i)
+            time.sleep(2**i)
     print(f"Giving up on {url}")
 
 
 def main():
+    """
+    Main function of the script.
+
+    Steps:
+        1. Create the data directory if it doesn't exist.
+        2. Find the latest available vintage of ONS vacancy data.
+        3. Download the latest vintage and the preceding 24 vintages.
+    """
     os.makedirs(DATA_DIR, exist_ok=True)
 
     try:
