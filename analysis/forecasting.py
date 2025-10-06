@@ -119,7 +119,7 @@ def plot_forecast(
     plt.legend()
     plt.grid()
     plt.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.show()
+    plt.close()
 
 
 def save_forecast(

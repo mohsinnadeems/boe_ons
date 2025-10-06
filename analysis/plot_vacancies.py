@@ -156,7 +156,7 @@ def create_monthly_vacancy_plot(
     plt.tight_layout()
     plt.suptitle("Vacancy Trends by Month Across Years", fontsize=16, y=1.02)
     plt.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.show()
+    plt.close()
 
 
 def main():
