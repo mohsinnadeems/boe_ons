@@ -53,12 +53,14 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Processed data with 'Year' and 'Month' columns.
     """
-    df['Year'] = df['Period'].str.split().str[0].astype(int)
-    df['Month'] = df['Period'].str.split().str[1]
+    df["Year"] = df["Period"].str.split().str[0].astype(int)
+    df["Month"] = df["Period"].str.split().str[1]
     return df
 
 
-def create_monthly_vacancy_plot(df: pd.DataFrame, months_order: List[str], output_path: Path) -> None:
+def create_monthly_vacancy_plot(
+    df: pd.DataFrame, months_order: List[str], output_path: Path
+) -> None:
     """
     Generate a line plot showing vacancy trends by month.
 
@@ -72,7 +74,7 @@ def create_monthly_vacancy_plot(df: pd.DataFrame, months_order: List[str], outpu
     """
     sns.set(style="whitegrid", palette="tab10", font_scale=1)
 
-    all_years: List[int] = sorted(df['Year'].unique())
+    all_years: List[int] = sorted(df["Year"].unique())
     tick_years: List[int] = all_years[::2]  # every 2 years
 
     fig, axes = plt.subplots(4, 3, figsize=(18, 12), sharey=True)
@@ -80,9 +82,11 @@ def create_monthly_vacancy_plot(df: pd.DataFrame, months_order: List[str], outpu
 
     for i, month in enumerate(months_order):
         ax = axes[i]
-        month_df = df[df['Month'] == month]
+        month_df = df[df["Month"] == month]
 
-        sns.lineplot(x='Year', y='Vacancies', data=month_df, ax=ax, marker="o", label=month)
+        sns.lineplot(
+            x="Year", y="Vacancies", data=month_df, ax=ax, marker="o", label=month
+        )
 
         ax.set_title(month, fontsize=12, fontweight="bold")
         ax.set_xlabel("Year", fontsize=10)
@@ -91,47 +95,62 @@ def create_monthly_vacancy_plot(df: pd.DataFrame, months_order: List[str], outpu
         ax.set_xticklabels(tick_years, rotation=45)
 
         if i in [0, 1, 2]:
-            if 2008 in month_df['Year'].values:
-                dip_value = month_df.loc[month_df['Year'] == 2008, 'Vacancies'].values[0]
+            if 2008 in month_df["Year"].values:
+                dip_value = month_df.loc[month_df["Year"] == 2008, "Vacancies"].values[
+                    0
+                ]
                 ax.annotate(
                     "Global Financial Crisis 2008",
                     xy=(2008, dip_value),
-                    xytext=(2004, month_df['Vacancies'].max()),
-                    arrowprops=dict(facecolor='orange', shrink=0.05, linestyle='dashed'),
-                    fontsize=9, color='orange'
+                    xytext=(2004, month_df["Vacancies"].max()),
+                    arrowprops=dict(
+                        facecolor="orange", shrink=0.05, linestyle="dashed"
+                    ),
+                    fontsize=9,
+                    color="orange",
                 )
 
         if i in [3, 4, 5]:
-            if 2020 in month_df['Year'].values:
-                dip_value = month_df.loc[month_df['Year'] == 2020, 'Vacancies'].values[0]
+            if 2020 in month_df["Year"].values:
+                dip_value = month_df.loc[month_df["Year"] == 2020, "Vacancies"].values[
+                    0
+                ]
                 ax.annotate(
                     "COVID dip",
                     xy=(2020, dip_value),
-                    xytext=(2016, month_df['Vacancies'].max()),
-                    arrowprops=dict(facecolor='red', shrink=0.05),
-                    fontsize=9, color='red'
+                    xytext=(2016, month_df["Vacancies"].max()),
+                    arrowprops=dict(facecolor="red", shrink=0.05),
+                    fontsize=9,
+                    color="red",
                 )
 
         if i in [6, 7, 8]:
-            if 2021 in month_df['Year'].values:
+            if 2021 in month_df["Year"].values:
                 ax.annotate(
                     "Recovery 2021",
-                    xy=(2021, month_df.loc[month_df['Year'] == 2021, 'Vacancies'].values[0]),
-                    xytext=(2018, month_df['Vacancies'].max()),
-                    arrowprops=dict(facecolor='green', shrink=0.05),
-                    fontsize=9, color='green'
+                    xy=(
+                        2021,
+                        month_df.loc[month_df["Year"] == 2021, "Vacancies"].values[0],
+                    ),
+                    xytext=(2018, month_df["Vacancies"].max()),
+                    arrowprops=dict(facecolor="green", shrink=0.05),
+                    fontsize=9,
+                    color="green",
                 )
 
         if i in [9, 10, 11]:
-            avg_value = month_df['Vacancies'].mean()
-            last_year = month_df['Year'].max()
-            last_value = month_df.loc[month_df['Year'] == last_year, 'Vacancies'].values[0]
+            avg_value = month_df["Vacancies"].mean()
+            last_year = month_df["Year"].max()
+            last_value = month_df.loc[
+                month_df["Year"] == last_year, "Vacancies"
+            ].values[0]
             ax.annotate(
                 "Back to average",
                 xy=(last_year, last_value),
                 xytext=(last_year - 3, avg_value + 10),
-                arrowprops=dict(facecolor='blue', shrink=0.05),
-                fontsize=9, color='blue'
+                arrowprops=dict(facecolor="blue", shrink=0.05),
+                fontsize=9,
+                color="blue",
             )
 
     plt.tight_layout()
@@ -148,8 +167,18 @@ def main():
     df = preprocess_data(df)
 
     months_order: List[str] = [
-        "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-        "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
     ]
 
     output_path = PLOTS_DIR / "monthly_vacancies.png"

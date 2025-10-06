@@ -52,7 +52,9 @@ def load_vacancy_data(path: Path) -> pd.Series:
     return df["Vacancies"].astype(float).resample("M").mean()
 
 
-def fit_holt_winters(train: pd.Series, seasonal_periods: int = 12) -> ExponentialSmoothing:
+def fit_holt_winters(
+    train: pd.Series, seasonal_periods: int = 12
+) -> ExponentialSmoothing:
     """
     Fit Holt-Winters Exponential Smoothing model.
 
@@ -85,7 +87,10 @@ def forecast_future(fit, steps: int) -> pd.Series:
 
 
 def plot_forecast(
-    train: pd.Series, forecast: pd.Series, forecast_index: pd.DatetimeIndex, output_path: Path
+    train: pd.Series,
+    forecast: pd.Series,
+    forecast_index: pd.DatetimeIndex,
+    output_path: Path,
 ) -> None:
     """
     Plot historical data and forecast.
@@ -117,7 +122,9 @@ def plot_forecast(
     plt.show()
 
 
-def save_forecast(forecast_index: pd.DatetimeIndex, forecast: pd.Series, path: Path) -> None:
+def save_forecast(
+    forecast_index: pd.DatetimeIndex, forecast: pd.Series, path: Path
+) -> None:
     """
     Save forecasted values to CSV.
 
@@ -129,7 +136,9 @@ def save_forecast(forecast_index: pd.DatetimeIndex, forecast: pd.Series, path: P
     Returns:
         None
     """
-    forecast_df = pd.DataFrame({"Period": forecast_index, "Predicted Vacancies": forecast})
+    forecast_df = pd.DataFrame(
+        {"Period": forecast_index, "Predicted Vacancies": forecast}
+    )
     forecast_df.to_csv(path, index=False)
 
 
@@ -147,7 +156,9 @@ def main() -> None:
     forecast = forecast_future(fit, forecast_steps)
 
     forecast_index = pd.date_range(
-        start=train.index[-1] + pd.DateOffset(months=1), periods=forecast_steps, freq="M"
+        start=train.index[-1] + pd.DateOffset(months=1),
+        periods=forecast_steps,
+        freq="M",
     )
 
     plot_forecast(train, forecast, forecast_index, PLOTS_DIR / "forecasting_plot.png")

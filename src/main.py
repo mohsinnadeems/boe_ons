@@ -45,7 +45,7 @@ def run_script(script_path: Path, script_name: str) -> bool:
             [sys.executable, str(script_path)],
             capture_output=True,
             text=True,
-            cwd=ROOT_DIR
+            cwd=ROOT_DIR,
         )
 
         if result.returncode == 0:

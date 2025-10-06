@@ -29,14 +29,14 @@ SAFE_MIN_VINTAGE = 117
 
 def find_latest_vintage(start: int = 200) -> int:
     """
-     Detect the latest vintage version of the ONS vacancy dataset.
+    Detect the latest vintage version of the ONS vacancy dataset.
 
-     Args:
-         start (int): The highest vintage version number to check (default: 200).
+    Args:
+        start (int): The highest vintage version number to check (default: 200).
 
-     Returns:
-         int: The latest vintage version found, with a minimum floor of SAFE_MIN_VINTAGE (v117).
-     """
+    Returns:
+        int: The latest vintage version found, with a minimum floor of SAFE_MIN_VINTAGE (v117).
+    """
     print("Detecting latest vintage...")
     detected = None
 
@@ -61,12 +61,12 @@ def find_latest_vintage(start: int = 200) -> int:
 
 def download_csv(url: str, filename: str) -> None:
     """
-      Download a CSV file from a URL and save it locally.
+    Download a CSV file from a URL and save it locally.
 
-      Args:
-          url (str): The URL to download the CSV from.
-          filename (str): The local file path where the CSV will be saved.
-      """
+    Args:
+        url (str): The URL to download the CSV from.
+        filename (str): The local file path where the CSV will be saved.
+    """
     if os.path.exists(filename):
         print(f"Already exists: {filename}")
         return
